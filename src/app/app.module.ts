@@ -10,6 +10,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from './service/api.service';
 
+import { DataTablesModule } from "angular-datatables";
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +27,9 @@ import { ApiService } from './service/api.service';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    DataTablesModule,
+    NgxDatatableModule,
+    BrowserAnimationsModule,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

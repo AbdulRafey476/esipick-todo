@@ -6,23 +6,22 @@ const bodyParser = require('body-parser')
 
 // Connecting with mongo db
 // Connecting MongoDB
-async function mongoDbConnection() {
-  await mongoose.connect(
-    // "mongodb://127.0.0.1:27017/test",
-    "mongodb://testesipick-todo:isiqmhbsl3JamLZI@cluster0.wycfupq.mongodb.net/?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
-    6000
-  );
-}
-mongoDbConnection().then(() => {
-  console.log("MongoDB successfully connected.");
-}),
-  (err) => {
-    console.log("Could not connected to database : " + err);
-  };
+// async function mongoDbConnection() {
+//   await mongoose.connect(
+//     // "mongodb://127.0.0.1:27017/test",
+//     "mongodb+srv://esipick:zsEvKwQ3lp2J6kfX@cluster0.sjm8hoe.mongodb.net/?retryWrites=true&w=majority",
+//     {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     },
+//     6000
+//   );
+// }
+// mongoDbConnection().then(() => {
+//   console.log("MongoDB successfully connected.");
+// }), (err) => {
+//   console.log("Could not connected to database : " + err);
+// };
 
 // Setting up port with express js
 const employeeRoute = require('../backend/routes/employee.route')

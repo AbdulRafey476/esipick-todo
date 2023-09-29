@@ -23,8 +23,8 @@ export class ApiService {
   }
 
   // Get all employees
-  getEmployees() {
-    return this.http.get(`${this.baseUri}`);
+  getEmployees(params) {
+    return this.http.post(`${this.baseUri}`, params);
   }
 
   // Get employee
