@@ -44,23 +44,28 @@ employeeRoute.route("/create").post(async (req, res, next) => {
 // Get All Employees
 employeeRoute.route("/", cors(corsOptionsDelegate)).post(async (req, res, next) => {
 
-  const { pageNumber, size, totalPages, column, order } = req.body;
+  const { pageNumber, size, totalPages, prop, dir, search } = req.body;
 
+  let filtered;
+
+  if (search) {
+    filtered = dummydata.filter(obj => Object.values(obj).some(val => val.toLowerCase().includes(search)));
+  } else {
+    filtered = dummydata
+  }
 
   let sorted;
 
-  if (order === 'asc') {
-    sorted = dummydata.sort((a, b) => a[column] - b[column]);
+  if (dir === 'asc') {
+    sorted = filtered.sort((a, b) => (a[prop] > b[prop]) ? 1 : ((b[prop] > a[prop]) ? -1 : 0))
   } else {
-    sorted = dummydata.sort((a, b) => b[column] - a[column]);
+    sorted = filtered.sort((a, b) => (a[prop] < b[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0))
   }
 
   const tatal = sorted.length
 
   const fromIndex = (pageNumber * size)
   const toIndex = ((pageNumber + 1) * size)
-
-  // console.log(sorted[0].name)
 
   return res.json({
     page: {
@@ -70,7 +75,6 @@ employeeRoute.route("/", cors(corsOptionsDelegate)).post(async (req, res, next) 
       totalPages,
     },
     data: sorted.slice(fromIndex, toIndex)
-    // data: sorted
   });
 });
 

@@ -3,10 +3,24 @@
     There is no employee added yet!
   </p>
 
-  <ngx-datatable class="material" [rows]="rows" [columns]="columns" [headerHeight]="50" [footerHeight]="50"
-    [columnMode]="ColumnMode.force" rowHeight="auto" [externalPaging]="true" [count]="page.totalElements"
-    [offset]="page.pageNumber" [limit]="page.size" (page)="setPage($event)" (sort)="onSort($event)">
+  <div>
+    <input type="text" style="padding:8px;margin:15px auto;width:30%;" placeholder="Search..."
+      (keyup)="updateFilter($event)" />
 
+    <select style="padding:8px;margin:15px auto;width:10%;float: right;"
+      (change)="onLimitChange($event.target.value)">
+      <option value="10" selected>10 </option>
+      <option value="20">20 </option>
+      <option value="50">50 </option>
+      <option value="100">100 </option>
+    </select>
+  </div>
+
+
+  <ngx-datatable class="material dark" [rows]="rows" [columns]="columns" [headerHeight]="50" [footerHeight]="50"
+    [columnMode]="ColumnMode.force" rowHeight="auto" [externalPaging]="true" [count]="page.totalElements"
+    [loadingIndicator]="loading" [externalSorting]="true" [sorts]="[sort]" [offset]="page.pageNumber"
+    [limit]="page.size" (page)="setPage($event)" (sort)="onSort($event)">
 
     <ngx-datatable-column *ngFor="let col of columns" [name]="col.name">
     </ngx-datatable-column>
@@ -21,6 +35,23 @@
         </span>
       </ng-template>
     </ngx-datatable-column>
+
+    <ngx-datatable-footer>
+      <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+        let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+        <div style="padding-left: 5px">
+          <div>
+            Showing {{(offset * pageSize)+1}} to {{(rowCount>
+            (curPage*pageSize))?(curPage*pageSize):(rowCount)}} of
+            {{(rowCount)}} records.
+          </div>
+        </div>
+        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'" [pagerRightArrowIcon]="'datatable-icon-right'"
+          [pagerPreviousIcon]="'datatable-icon-prev'" [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage"
+          [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)" (change)="setPage($event)">
+        </datatable-pager>
+      </ng-template>
+    </ngx-datatable-footer>
 
   </ngx-datatable>
 

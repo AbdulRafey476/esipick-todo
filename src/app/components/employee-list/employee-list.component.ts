@@ -19,12 +19,10 @@ export class EmployeeListComponent implements OnInit {
   reorderable = true;
 
   columns = [
-    // { prop: '_id' },
     { prop: 'name' },
     { prop: 'email' },
     { prop: 'designation' },
     { prop: 'phoneNumber' },
-    // { name: "Actions", prop: 'Actions' }
   ];
 
   page = {
@@ -35,9 +33,13 @@ export class EmployeeListComponent implements OnInit {
   }
 
   sort = {
-    column: '_id',
-    order: 'asc'
+    prop: 'name',
+    dir: 'asc'
   }
+
+  search = "";
+
+  loading = false;
 
   constructor(private apiService: ApiService) {
     this.page.pageNumber = 0;
@@ -45,15 +47,18 @@ export class EmployeeListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setPage({ offset: 0 });
+    this.setPage({ page: 1 });
   }
 
   readEmployee() {
-    this.apiService.getEmployees({ ...this.page, ...this.sort }).subscribe((result) => {
+    this.loading = true;
+
+    this.apiService.getEmployees({ ...this.page, ...this.sort, search: this.search }).subscribe((result) => {
       this.page = result['page'];
       this.rows = result['data'];
       setTimeout(() => {
         this.loadingIndicator = false;
+        this.loading = false;
       }, 1500);
     });
   }
@@ -67,15 +72,29 @@ export class EmployeeListComponent implements OnInit {
   }
 
   setPage(e) {
-    this.page.pageNumber = e.offset;
+    this.page.pageNumber = (e.page - 1);
     this.readEmployee()
   }
 
   onSort(e) {
     this.sort = {
-      column: e.column.prop,
-      order: e.newValue
+      prop: e.column.prop,
+      dir: e.newValue
     }
     this.readEmployee()
+  }
+
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+    this.search = val.trim()
+
+    if (event.key === "Enter" && event.keyCode === 13) {
+      this.setPage({ page: 1 });
+    }
+  }
+
+  onLimitChange(e) {
+    this.page.size = Number(e)
+    this.setPage({ page: 1 });
   }
 }
